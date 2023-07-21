@@ -2,7 +2,6 @@ streamlit
 streamlit-chat
 PyPDF2
 openai
-python-dotenv
 chromadb
 tiktoken
 langchain
