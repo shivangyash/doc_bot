@@ -13,7 +13,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-openai_api_key=os.getenv("OPENAI_API_KEY_2")
+# openai_api_key=os.getenv("OPENAI_API_KEY_2")
 #This function will go through pdf and extract and return list of page texts.
 def read_and_textify(files):
     text_list = []
@@ -50,7 +50,7 @@ def response(prompt, upload_files=uploaded_files):
         sources = textify_output[1]
         
         #extract embeddings
-        embeddings = OpenAIEmbeddings(openai_api_key = openai_api_key)
+        embeddings = OpenAIEmbeddings(openai_api_key = st.secrets["openai_api_key"])
         #vstore with metadata. Here we will store page numbers.
         vStore = Chroma.from_texts(documents, embeddings, metadatas=[{"source": s} for s in sources])
         #deciding model
@@ -62,7 +62,7 @@ def response(prompt, upload_files=uploaded_files):
         retriever.search_kwargs = {'k':2}
 
         #initiate model
-        llm = OpenAI(model_name=model_name, openai_api_key = openai_api_key, streaming=True)
+        llm = OpenAI(model_name=model_name, openai_api_key = st.secrets["openai_api_key"], streaming=True)
         model = RetrievalQAWithSourcesChain.from_chain_type(llm=llm, chain_type="stuff", retriever=retriever)
         result = model({"question":prompt}, return_only_outputs=True)
 
@@ -189,12 +189,4 @@ if st.session_state.send_button==True:
         
         
     
-  
-  
-
-  
-  
-  
-  
-  
   
